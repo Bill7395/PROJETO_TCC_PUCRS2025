@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: white;
+}
+input, select, button {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}
