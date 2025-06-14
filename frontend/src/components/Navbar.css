@@ -3,27 +3,15 @@
   color: white;
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Alinha os itens corretamente */
   padding: 1rem;
 }
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1rem; /* Adiciona espaçamento entre os botões */
-}
-
-.nav-links a, .nav-links button {
+.nav-links a {
   color: white;
+  margin-left: 1rem;
   text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
 }
-
-.nav-links button {
-  background-color: #FF3877;
-  border-radius: 5px;
+.logo a {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
 }

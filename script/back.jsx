@@ -193,3 +193,82 @@ exports.proteger = async (req, res, next) => {
 // backend/.env (exemplo - criar no root do backend)
 // MONGO_URI=mongodb://localhost:27017/marketplace
 // JWT_SECRET=sua_chave_secreta
+
+
+// implementação porterior
+
+// backend/models/Order.js
+
+const mongoose = require('mongoose');
+
+const orderSchema = new mongoose.Schema({
+  comprador: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  produtos: [
+    {
+      produto: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      quantidade: { type: Number, required: true },
+    }
+  ],
+  total: { type: Number, required: true },
+  status: { type: String, enum: ['pendente', 'concluído', 'cancelado'], default: 'pendente' },
+  criadoEm: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Order', orderSchema);
+
+// backend/controllers/orderController.js
+
+const Order = require('../models/Order');
+const Product = require('../models/Product');
+
+exports.criarPedido = async (req, res) => {
+  const { produtos } = req.body;
+  const compradorId = req.user.id;
+
+  try {
+    let total = 0;
+    for (const item of produtos) {
+      const produto = await Product.findById(item.produto);
+      if (!produto || produto.estoque < item.quantidade) {
+        return res.status(400).json({ mensagem: 'Produto indisponível' });
+      }
+      total += produto.preco * item.quantidade;
+      produto.estoque -= item.quantidade;
+      await produto.save();
+    }
+
+    const pedido = await Order.create({ comprador: compradorId, produtos, total });
+    res.status(201).json(pedido);
+  } catch (err) {
+    res.status(500).json({ mensagem: 'Erro ao criar pedido', erro: err.message });
+  }
+};
+
+exports.listarPedidosUsuario = async (req, res) => {
+  try {
+    const pedidos = await Order.find({ comprador: req.user.id }).populate('produtos.produto', 'titulo preco');
+    res.status(200).json(pedidos);
+  } catch (err) {
+    res.status(500).json({ mensagem: 'Erro ao listar pedidos', erro: err.message });
+  }
+};
+
+// backend/routes/orderRoutes.js
+
+const express = require('express');
+const { criarPedido, listarPedidosUsuario } = require('../controllers/orderController');
+const { proteger } = require('../middleware/authMiddleware');
+const router = express.Router();
+
+router.post('/', proteger, criarPedido);
+router.get('/', proteger, listarPedidosUsuario);
+
+module.exports = router;
+
+// Adicionar rota ao arquivo  backend/server.js
+
+const orderRoutes = require('./routes/orderRoutes');
+app.use('/api/orders', orderRoutes);
+
+
+

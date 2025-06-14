@@ -1,22 +1,18 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getUser, logout } from '../services/auth';
+import { useState, useEffect } from 'react';
 import './Navbar.css';
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const [usuario, setUsuario] = useState(null);
+  const [usuario, setUsuario] = useState(getUser());
 
   useEffect(() => {
-    const usuarioSalvo = JSON.parse(localStorage.getItem('usuario'));
-    setUsuario(usuarioSalvo);
+    const atualizarUsuario = () => {
+      setUsuario(getUser());
+    };
+    window.addEventListener('storage', atualizarUsuario);
+    return () => window.removeEventListener('storage', atualizarUsuario);
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    setUsuario(null);
-    navigate('/login');
-  };
 
   return (
     <nav className="navbar">
@@ -31,15 +27,17 @@ export default function Navbar() {
           </>
         ) : usuario.tipo === 'vendedor' ? (
           <>
-            <Link to="/pedidos">Pedidos Recebidos</Link>
-            <Link to="/carrinho">Carrinho</Link>
-            <button onClick={handleLogout}>Sair</button>
+            <Link to="/orders">Pedidos Recebidos</Link>
+            <Link to="/publish">Publicar Produto</Link>
+            <Link to="/cart">Carrinho</Link>
+            <button onClick={() => { logout(); setUsuario(null); }}>Sair</button>
           </>
         ) : (
           <>
-            <Link to="/meus-pedidos">Meus Pedidos</Link>
-            <Link to="/carrinho">Carrinho</Link>
-            <button onClick={handleLogout}>Sair</button>
+            <Link to="/">Home</Link>
+            <Link to="/orders">Meus Pedidos</Link>
+            <Link to="/cart">Carrinho</Link>
+            <button onClick={() => { logout(); setUsuario(null); }}>Sair</button>
           </>
         )}
       </div>

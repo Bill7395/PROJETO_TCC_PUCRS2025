@@ -12,7 +12,8 @@ export default function Register() {
     try {
       const res = await api.post('/users/register', { nome, email, senha, tipo });
       localStorage.setItem('token', res.data.token);
-      alert('Registrado com sucesso!');
+      localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
+      window.location.reload(); // Recarrega a página para atualizar a Navbar
     } catch (err) {
       alert('Erro ao registrar');
     }
@@ -21,10 +22,10 @@ export default function Register() {
   return (
     <form onSubmit={handleRegister} style={{ padding: '2rem' }}>
       <h2>Registrar</h2>
-      <input placeholder="Nome" value={nome} onChange={e => setNome(e.target.value)} />
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-      <input placeholder="Senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} />
-      <select value={tipo} onChange={e => setTipo(e.target.value)}>
+      <input placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
+      <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input placeholder="Senha" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} />
+      <select value={tipo} onChange={(e) => setTipo(e.target.value)}>
         <option value="cliente">Cliente</option>
         <option value="vendedor">Vendedor</option>
       </select>
