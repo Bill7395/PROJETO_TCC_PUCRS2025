@@ -27,17 +27,18 @@ export default function Navbar() {
           </>
         ) : usuario.tipo === 'vendedor' ? (
           <>
+            <Link to="/">Home</Link>
             <Link to="/orders">Pedidos Recebidos</Link>
             <Link to="/publish">Publicar Produto</Link>
             <Link to="/cart">Carrinho</Link>
-            <button onClick={() => { logout(); setUsuario(null); }}>Sair</button>
+            <Link onClick={() => { logout(); setUsuario(null); }}>Sair</Link>
           </>
         ) : (
           <>
             <Link to="/">Home</Link>
             <Link to="/orders">Meus Pedidos</Link>
             <Link to="/cart">Carrinho</Link>
-            <button onClick={() => { logout(); setUsuario(null); }}>Sair</button>
+            <Link onClick={() => { logout(); setUsuario(null); }}>Sair</Link>
           </>
         )}
       </div>
