@@ -1,9 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const { criarProduto, listarProdutos } = require('../controllers/productController');
+const { criarProduto } = require('../controllers/productController');
 const { proteger } = require('../middleware/authMiddleware');
+const { listarProdutos } = require('../controllers/productController')
 
-router.post('/', proteger, criarProduto);
-router.get('/', listarProdutos);
+const router = express.Router();
+
+router.post('/', proteger, criarProduto); // Apenas usuários autenticados podem cadastrar produtos
+router.get('/', listarProdutos); // Endpoint para listar produtos
 
 module.exports = router;

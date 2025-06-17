@@ -295,3 +295,198 @@ export default function ProductCard({ produto }) {
 // Adicionar um link na Navbar.jsx
 
 <Link to="/orders">Meus Pedidos</Link>
+
+// Editar o arquivo: frontend/src/components/Navbar.jsx
+
+import { Link } from 'react-router-dom';
+import { getUser, logout } from '../services/auth';
+import './Navbar.css';
+
+export default function Navbar() {
+  const usuario = getUser(); // Obter usuário logado
+
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <Link to="/">Marketplace</Link>
+      </div>
+      <div className="nav-links">
+        {usuario?.tipo === 'vendedor' ? (
+          <>
+            <Link to="/orders">Pedidos Recebidos</Link>
+            <Link to="/publish">Publicar Produto</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/">Home</Link>
+            <Link to="/orders">Meus Pedidos</Link>
+          </>
+        )}
+        <Link to="/cart">Carrinho</Link>
+        <button onClick={logout}>Sair</button>
+      </div>
+    </nav>
+  );
+}
+
+// Criar arquivo: frontend/src/services/auth.js
+
+export const getUser = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  return usuario;
+};
+
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('usuario');
+  window.location.href = '/login';
+};
+
+
+//  Editar o arquivo: frontend/src/App.jsx
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Orders from './pages/Orders';
+import PublishProduct from './pages/PublishProduct';
+import Cart from './pages/Cart';
+import { getUser } from './services/auth';
+
+function App() {
+  const usuario = getUser();
+
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart />} />
+        
+        {usuario?.tipo === 'vendedor' ? (
+          <>
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/publish" element={<PublishProduct />} />
+          </>
+        ) : usuario?.tipo === 'cliente' ? (
+          <>
+            <Route path="/orders" element={<Orders />} />
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+// Criar o arquivo: frontend/src/pages/PublishProduct.jsx
+
+import { useState } from 'react';
+import api from '../services/api';
+
+export default function PublishProduct() {
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [categoria, setCategoria] = useState('');
+  const [imagem, setImagem] = useState('');
+  const [estoque, setEstoque] = useState('');
+  const [mensagem, setMensagem] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post('/products', { titulo, descricao, preco, categoria, imagem, estoque });
+      setMensagem('Produto publicado com sucesso!');
+    } catch (err) {
+      setMensagem('Erro ao publicar produto.');
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h2>Publicar Produto</h2>
+      <form onSubmit={handleSubmit}>
+        <input placeholder="Título" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
+        <textarea placeholder="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
+        <input type="number" placeholder="Preço" value={preco} onChange={(e) => setPreco(e.target.value)} required />
+        <input placeholder="Categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)} required />
+        <input placeholder="URL da Imagem" value={imagem} onChange={(e) => setImagem(e.target.value)} />
+        <input type="number" placeholder="Estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} required />
+        <button type="submit">Publicar</button>
+      </form>
+      {mensagem && <p>{mensagem}</p>}
+    </div>
+  );
+}
+
+
+// Criar o arquivo: frontend/src/pages/Cart.jsx
+
+import { useState, useEffect } from 'react';
+import { criarPedido } from '../services/orderApi';
+
+export default function Cart() {
+  const [carrinho, setCarrinho] = useState([]);
+
+  useEffect(() => {
+    const itens = JSON.parse(localStorage.getItem('carrinho')) || [];
+    setCarrinho(itens);
+  }, []);
+
+  const handleComprar = async () => {
+    try {
+      await criarPedido(carrinho);
+      localStorage.removeItem('carrinho');
+      setCarrinho([]);
+      alert('Pedido realizado com sucesso!');
+    } catch (err) {
+      alert('Erro ao processar compra.');
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h2>Carrinho de Compras</h2>
+      {carrinho.length === 0 ? (
+        <p>Seu carrinho está vazio.</p>
+      ) : (
+        <>
+          <ul>
+            {carrinho.map((item, index) => (
+              <li key={index}>{item.titulo} - {item.quantidade}x</li>
+            ))}
+          </ul>
+          <button onClick={handleComprar}>Finalizar Compra</button>
+        </>
+      )}
+    </div>
+  );
+}
+
+// Editar o arquivo frontend/src/components/ProductCard.jsx
+
+const handleAdicionarCarrinho = () => {
+  const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+  carrinho.push({ produto: produto._id, titulo: produto.titulo, quantidade: 1 });
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+  alert('Produto adicionado ao carrinho!');
+};
+
+<button onClick={handleAdicionarCarrinho}>Adicionar ao Carrinho</button>
+
+
+
+// Editar o arquivo: frontend/src/components/Navbar.jsx
+
+
