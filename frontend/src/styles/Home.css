@@ -1,0 +1,20 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  justify-content: center;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.product-card img {
+  width: 200px;  /* Define um tamanho fixo */
+  height: 200px; /* Evita imagens desproporcionais */
+  object-fit: cover; /* Mantém proporção sem distorcer */
+  border-radius: 8px;
+}

@@ -21,3 +21,5 @@ app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
 const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/orders', orderRoutes);
+
+console.log('Variáveis de ambiente:', process.env.CLOUDINARY_CLOUD_NAME, process.env.CLOUDINARY_API_KEY);

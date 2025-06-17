@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { criarPedido } from '../services/orderApi';
 import { adicionarAoCarrinho } from '../services/cart';
+import '../styles/ProductCard.css'; // Importando o novo CSS
 
 export default function ProductCard({ produto }) {
   const [mensagem, setMensagem] = useState('');
@@ -21,13 +22,15 @@ export default function ProductCard({ produto }) {
 
   return (
     <div className="product-card">
-      <img src={produto.imagem || 'https://via.placeholder.com/150'} alt={produto.titulo} />
+      <img src={produto.imagem || 'https://via.placeholder.com/200'} alt={produto.titulo} />
       <h3>{produto.titulo}</h3>
       <p>{produto.descricao}</p>
       <strong>R$ {produto.preco.toFixed(2)}</strong>
-      <button onClick={handleComprar}>Comprar</button>
-      <button onClick={handleAdicionarCarrinho}>Adicionar ao Carrinho</button>
-      {mensagem && <p>{mensagem}</p>}
+
+      <div className="button-container"> {/* Contêiner para centralizar botões */}
+        <button onClick={handleComprar}>Comprar</button>
+        <button onClick={handleAdicionarCarrinho}>Adicionar ao Carrinho</button>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
   descricao: { type: String, required: true },
   preco: { type: Number, required: true },
   categoria: { type: String, required: true },
-  imagem: { type: String },
+  imagem: { type: String }, 
   estoque: { type: Number, required: true },
   vendedor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   criadoEm: { type: Date, default: Date.now }

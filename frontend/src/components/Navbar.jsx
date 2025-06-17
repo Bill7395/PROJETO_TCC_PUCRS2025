@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">Marketplace</Link>
+        <Link to="/">Marketplace TCC</Link>
       </div>
       <div className="nav-links">
         {!usuario ? (
