@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
+import { obterCarrinho, removerDoCarrinho, limparCarrinho } from '../services/cart';
 import { criarPedido } from '../services/orderApi';
 
 export default function Cart() {
   const [carrinho, setCarrinho] = useState([]);
 
   useEffect(() => {
-    const itens = JSON.parse(localStorage.getItem('carrinho')) || [];
-    setCarrinho(itens);
+    setCarrinho(obterCarrinho());
   }, []);
 
-  const handleComprar = async () => {
+  const handleFinalizarCompra = async () => {
     try {
       await criarPedido(carrinho);
-      localStorage.removeItem('carrinho');
+      limparCarrinho();
       setCarrinho([]);
-      alert('Pedido realizado com sucesso!');
+      alert('Pedido finalizado com sucesso!');
     } catch (err) {
       alert('Erro ao processar compra.');
     }
@@ -28,11 +28,14 @@ export default function Cart() {
       ) : (
         <>
           <ul>
-            {carrinho.map((item, index) => (
-              <li key={index}>{item.titulo} - {item.quantidade}x</li>
+            {carrinho.map(item => (
+              <li key={item.produto._id}>
+                {item.produto.titulo} - {item.quantidade}x
+                <button onClick={() => removerDoCarrinho(item.produto._id)}>Remover</button>
+              </li>
             ))}
           </ul>
-          <button onClick={handleComprar}>Finalizar Compra</button>
+          <button onClick={handleFinalizarCompra}>Finalizar Compra</button>
         </>
       )}
     </div>
