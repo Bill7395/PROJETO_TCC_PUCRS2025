@@ -5,6 +5,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const connectDB = require('./config/db');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 dotenv.config();
 connectDB();
@@ -21,5 +22,7 @@ app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
 const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/orders', orderRoutes);
+
+app.use('/api/payment', paymentRoutes);
 
 console.log('Variáveis de ambiente:', process.env.CLOUDINARY_CLOUD_NAME, process.env.CLOUDINARY_API_KEY);

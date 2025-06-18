@@ -3,9 +3,9 @@ export const adicionarAoCarrinho = (produto) => {
   
   const index = carrinho.findIndex(item => item.produto._id === produto._id);
   if (index !== -1) {
-    carrinho[index].quantidade += 1; // Se já existir no carrinho, aumenta a quantidade
+    carrinho[index].quantidade += 1;
   } else {
-    carrinho.push({ produto, quantidade: 1 });
+    carrinho.push({ produto, quantidade: 1, imagem: produto.imagem });
   }
 
   localStorage.setItem('carrinho', JSON.stringify(carrinho));
