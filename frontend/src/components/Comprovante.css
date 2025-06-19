@@ -1,0 +1,27 @@
+.comprovante-container {
+  background-color: #f0fff4;
+  border: 2px solid #38a169;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.comprovante-container h2 {
+  color: #2f855a;
+  margin-bottom: 1rem;
+}
+
+.comprovante-container p {
+  margin: 0.5rem 0;
+}
+
+.comprovante-container button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #38a169;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,28 @@
+.form-pagamento {
+  margin-top: 20px;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.form-pagamento h3 {
+  margin-bottom: 10px;
+}
+
+.form-pagamento input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-pagamento .linha {
+  display: flex;
+  gap: 10px;
+}
+.form-pagamento .linha input {
+  flex: 1;
+}
