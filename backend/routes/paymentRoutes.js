@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/checkout', proteger, async (req, res) => {
   try {
-    const pagamento = await criarPagamento(req.body); // recebe produtos, total, cliente
+    const pagamento = await criarPagamento(req.body);
     res.status(200).json({ pagamento });
   } catch (err) {
     console.error('Erro ao processar pagamento:', err.message);

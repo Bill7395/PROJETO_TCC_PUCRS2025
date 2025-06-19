@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { listarProdutos } from '../services/api';
 import ProductCard from '../components/ProductCard';
-import '../styles/Home.css'; // Importando o novo CSS
+import '../styles/Home.css';
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);

@@ -10,8 +10,8 @@ export default function Login() {
     try {
       const res = await api.post('/users/login', { email, senha });
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('usuario', JSON.stringify(res.data.usuario)); // Armazena o usuário
-      window.location.reload(); // Recarrega a página para atualizar a Navbar
+      localStorage.setItem('usuario', JSON.stringify(res.data.usuario));
+      window.location.reload(); 
     } catch (err) {
       alert('Erro ao fazer login');
     }

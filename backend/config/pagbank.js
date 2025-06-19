@@ -1,32 +1,9 @@
 require('dotenv').config();
 const axios = require('axios');
 
-/*const PAGBANK_API_URL = 'https://sandbox.api.pagseguro.com/checkout/v2/transactions'; // URL correta
-const PAGBANK_EMAIL = process.env.PAGBANK_EMAIL;
-const PAGBANK_TOKEN = process.env.PAGBANK_TOKEN;
-
-const criarPagamento = async (pedido) => {
-  try {
-    const resposta = await axios.post(PAGBANK_API_URL, pedido, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.PAGBANK_TOKEN}` // Certifique-se que está correto
-      }
-    });
-    return resposta.data;
-  } catch (error) {
-    console.error('Erro ao processar pagamento:', error.response?.data || error.message);
-    throw new Error('Pagamento não autorizado.');
-  }
-};
-
-console.log('Credenciais carregadas:', process.env.PAGBANK_EMAIL, process.env.PAGBANK_TOKEN);
-
-module.exports = { criarPagamento }; */
-
 const PAGBANK_API_URL = 'https://sandbox.api.pagseguro.com/orders';
 
-const criarPagamento = async ({ produtos, total, cliente }) => {
+const criarPagamento = async ({ produtos, total, cliente, reference_id }) => {
   const itens = produtos.map(item => ({
     name: item.produto.titulo,
     quantity: item.quantidade,
@@ -34,7 +11,7 @@ const criarPagamento = async ({ produtos, total, cliente }) => {
   }));
 
   const body = {
-    reference_id: `pedido-${Date.now()}`,
+    reference_id,
     customer: {
       name: cliente.nome,
       email: cliente.email,
@@ -67,15 +44,20 @@ const criarPagamento = async ({ produtos, total, cliente }) => {
     ]
   };
 
-const resposta = await axios.post('https://sandbox.api.pagseguro.com/orders', body, {
-  headers: {
-    Authorization: `Bearer ${process.env.PAGBANK_TOKEN}`,
-    'Content-Type': 'application/json'
+  try {
+    const resposta = await axios.post(PAGBANK_API_URL, body, {
+      headers: {
+        Authorization: `Bearer ${process.env.PAGBANK_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000
+    });
+
+    return resposta.data;
+  } catch (error) {
+    console.error('[Erro ao comunicar com PagBank]', error.response?.data || error.message);
+    throw new Error('Não foi possível concluir o pagamento.');
   }
-});
-
-  return resposta.data;
 };
-
 
 module.exports = { criarPagamento };

@@ -35,9 +35,9 @@ router.post('/upload', proteger, upload.single('imagem'), async (req, res) => {
       return res.status(400).json({ mensagem: 'Nenhuma imagem enviada' });
     }
 
-    console.log('Arquivo recebido:', req.file.originalname); // Debug para validação
+    console.log('Arquivo recebido:', req.file.originalname);
 
-    // Agora chamamos a função `uploadImagem()` corretamente
+    
     const resultado = await uploadImagem(req.file.buffer);
     res.status(200).json({ imagem: resultado.secure_url });
 

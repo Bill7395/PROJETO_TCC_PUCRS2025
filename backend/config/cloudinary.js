@@ -1,4 +1,4 @@
-require('dotenv').config(); // Garante que as variáveis sejam carregadas
+require('dotenv').config(); // Carrega credenciais de acesso
 
 const cloudinary = require('cloudinary').v2;
 
@@ -8,6 +8,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log('Cloudinary Config:', cloudinary.config()); // Debug no console
+console.log('Cloudinary Config:', cloudinary.config());
 
 module.exports = cloudinary;

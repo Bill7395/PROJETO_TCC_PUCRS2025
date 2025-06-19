@@ -23,10 +23,10 @@ exports.criarProduto = async (req, res) => {
 };
 
 
-// Listagem dos produtos na home
+// Listagem dos produtos disponibilizados na home
 exports.listarProdutos = async (req, res) => {
   try {
-    const produtos = await Product.find().populate('vendedor', 'nome'); // Traz info do vendedor
+    const produtos = await Product.find().populate('vendedor', 'nome'); // informações do vendedor
     res.status(200).json(produtos);
   } catch (err) {
     res.status(500).json({ mensagem: 'Erro ao listar produtos', erro: err.message });
