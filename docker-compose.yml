@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/tccmarketplace
+      - PAGBANK_EMAIL=gabrielsouzasantos1995@outlook.com
+      - PAGBANK_TOKEN=0f4f85a2-bcf6-4404-aabb-7a110e75bafdfd616643407a83063aff928ca54a36e09d81-7156-444e-a8a4-01e2ac73d9ed
+      - JWT_SECRET=4f71b25a2da9a17ce8e302701d1b7fa1
+      - CLOUDINARY_CLOUD_NAME=doojyevce
+      - CLOUDINARY_API_KEY=791981195455177
+      - CLOUDINARY_API_SECRET=UoqkoDVHejcd_v-YMEXPxUK-lac
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3001:80'
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
