@@ -1,6 +1,3 @@
-Claro, Gabriel! Aqui está o `README.md` completo para o seu projeto, no estilo documentação técnica — pronto para ser usado no GitHub ou como guia de instalação e execução:
-
----
 
 # 🛒 Marketplace TCC – PUCRS 2025
 
